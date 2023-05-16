@@ -23,6 +23,7 @@ jobs:
       - image: twdps/circleci-infra-aws:alpine-4.9.0
     steps:
       - checkout
+      - setup_remote_docker
       - run:
           name: hello
           command: |
