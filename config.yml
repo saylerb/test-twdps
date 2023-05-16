@@ -1,0 +1,36 @@
+---
+version: 2.1
+
+on-push-main: &on-push-main
+  branches:
+    only: /main/
+  tags:
+    ignore: /.*/
+
+on-tag-main: &on-tag-main
+  branches:
+    ignore: /.*/
+  tags:
+    only: /.*/
+
+
+jobs:
+
+  hello-world:
+    description: |
+      hello
+    docker:
+      - image: twdps/circleci-infra-aws:alpine-4.9.0
+    steps:
+      - checkout
+      - run:
+          name: hello
+          command: |
+            echo "hello, world"
+
+workflows:
+  version: 2
+
+  workflow1:
+    jobs:
+      - hello-world
