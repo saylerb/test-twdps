@@ -1,6 +1,11 @@
 ---
 version: 2.1
 
+
+default-executor: &default-executor
+  docker:
+    - image: twdps/circleci-infra-aws:alpine-4.9.0
+
 on-push-main: &on-push-main
   branches:
     only: /main/
@@ -14,24 +19,38 @@ on-tag-main: &on-tag-main
     only: /.*/
 
 
-jobs:
+commands:
+  hello:
+    steps:
+    - run:
+        name: hello
+        command: echo "hello, world"
 
-  hello-world:
+jobs:
+  hello-world-fails:
     description: |
-      hello
-    docker:
-      - image: twdps/circleci-infra-aws:alpine-4.9.0
+      example of failure with uid problem without setup_remote_docker #https://circleci.com/docs/2.0/high-uid-error/
+    <<: *default-executor
+    steps:
+      - checkout
+#      - setup_remote_docker
+      - hello
+  hello-world-succeeds:
+    description: |
+      example of setup successful when `setup_remote_docker` is used
+    <<: *default-executor
     steps:
       - checkout
       - setup_remote_docker
-      - run:
-          name: hello
-          command: |
-            echo "hello, world"
+      - hello
 
 workflows:
   version: 2
 
   workflow1:
     jobs:
-      - hello-world
+      - hello-world-fails:
+        filters: *on-push-main
+      - hello-world-succeeds:
+        filters: *on-push-main
+
