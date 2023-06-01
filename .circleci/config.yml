@@ -4,7 +4,7 @@ version: 2.1
 
 default-executor: &default-executor
   docker:
-    - image: twdps/circleci-infra-aws:alpine-4.9.0
+    - image: twdps/circleci-infra-aws:alpine-4.11.0
 
 on-push-main: &on-push-main
   branches:
